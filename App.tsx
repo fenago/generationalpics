@@ -8,6 +8,7 @@ import { generateDecadeImage } from './services/geminiService';
 import PolaroidCard from './components/PolaroidCard';
 import { createAlbumPage } from './lib/albumUtils';
 import Footer from './components/Footer';
+import SplashCursor from './components/SplashCursor';
 
 const DECADES = ['1950s', '1960s', '1970s', '1980s', '1990s', '2000s'];
 
@@ -38,8 +39,8 @@ interface GeneratedImage {
     error?: string;
 }
 
-const primaryButtonClasses = "font-permanent-marker text-xl text-center text-white bg-blue-600 py-3 px-8 rounded-sm transform transition-transform duration-200 hover:scale-105 hover:-rotate-2 hover:bg-blue-700 shadow-[2px_2px_0px_2px_rgba(0,0,0,0.2)]";
-const secondaryButtonClasses = "font-permanent-marker text-xl text-center text-gray-700 bg-gray-200 backdrop-blur-sm border-2 border-gray-300 py-3 px-8 rounded-sm transform transition-transform duration-200 hover:scale-105 hover:rotate-2 hover:bg-gray-300 hover:text-gray-800";
+const primaryButtonClasses = "font-permanent-marker text-xl text-center text-white bg-gray-800 py-3 px-8 rounded-sm transform transition-transform duration-200 hover:scale-105 hover:-rotate-2 hover:bg-gray-700 shadow-[2px_2px_0px_2px_rgba(0,0,0,0.2)]";
+const secondaryButtonClasses = "font-permanent-marker text-xl text-center text-gray-800 bg-gray-200 backdrop-blur-sm border-2 border-gray-300 py-3 px-8 rounded-sm transform transition-transform duration-200 hover:scale-105 hover:rotate-2 hover:bg-gray-100";
 
 const useMediaQuery = (query: string) => {
     const [matches, setMatches] = useState(false);
@@ -68,12 +69,54 @@ function App() {
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                console.error('Invalid file type:', file.type);
+                alert('Please upload a valid image file (JPEG, PNG, or WebP)');
+                return;
+            }
+            
+            // Validate file size (max 10MB)
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                console.error('File too large:', file.size);
+                alert('File size must be less than 10MB');
+                return;
+            }
+            
+            console.log('Processing file:', {
+                name: file.name,
+                type: file.type,
+                size: file.size
+            });
+            
             const reader = new FileReader();
+            
             reader.onloadend = () => {
-                setUploadedImage(reader.result as string);
-                setAppState('image-uploaded');
-                setGeneratedImages({}); // Clear previous results
+                const result = reader.result as string;
+                console.log('FileReader result:', {
+                    length: result.length,
+                    prefix: result.substring(0, 50),
+                    isValidDataURL: result.startsWith('data:image/')
+                });
+                
+                if (result && result.startsWith('data:image/')) {
+                    setUploadedImage(result);
+                    setAppState('image-uploaded');
+                    setGeneratedImages({}); // Clear previous results
+                } else {
+                    console.error('Invalid data URL generated:', result);
+                    alert('Failed to process image. Please try a different file.');
+                }
             };
+            
+            reader.onerror = (error) => {
+                console.error('FileReader error:', error);
+                alert('Failed to read the image file. Please try again.');
+            };
+            
             reader.readAsDataURL(file);
         }
     };
@@ -184,7 +227,9 @@ function App() {
             const imageData = Object.entries(generatedImages)
                 .filter(([, image]: [string, GeneratedImage]) => image.status === 'done' && image.url)
                 .reduce((acc, [decade, image]: [string, GeneratedImage]) => {
-                    acc[decade] = image.url!;
+                    if (image.status === 'done' && image.url) {
+                        acc[decade] = image.url;
+                    }
                     return acc;
                 }, {} as Record<string, string>);
 
@@ -211,13 +256,14 @@ function App() {
     };
 
     return (
-        <main className="bg-white text-neutral-800 min-h-screen w-full flex flex-col items-center justify-center p-4 pb-24 overflow-hidden relative">
+        <main className="bg-white text-gray-800 min-h-screen w-full flex flex-col items-center justify-center p-4 pb-24 overflow-hidden relative">
+            <SplashCursor />
             <div className="absolute top-0 left-0 w-full h-full bg-grid-black/[0.05]"></div>
             
             <div className="z-10 flex flex-col items-center justify-center w-full h-full flex-1 min-h-0">
                 <div className="text-center mb-10">
-                    <h1 className="text-6xl md:text-8xl font-caveat font-bold text-neutral-900">Photo Album</h1>
-                    <p className="font-permanent-marker text-neutral-700 mt-2 text-xl tracking-wide">See Yourself Through the Years</p>
+                    <h1 className="text-6xl md:text-8xl font-caveat font-bold text-gray-900">Photo Album</h1>
+                    <p className="font-permanent-marker text-gray-600 mt-2 text-xl tracking-wide">Through the Years (by Dr. Lee)</p>
                 </div>
 
                 {appState === 'idle' && (
@@ -226,7 +272,7 @@ function App() {
                         {GHOST_POLAROIDS_CONFIG.map((config, index) => (
                              <motion.div
                                 key={index}
-                                className="absolute w-80 h-[26rem] rounded-md p-4 bg-neutral-900/10 blur-sm"
+                                className="absolute w-80 h-[26rem] rounded-md p-4 bg-gray-200/30 blur-sm"
                                 initial={config.initial}
                                 animate={{
                                     x: "0%", y: "0%", rotate: (Math.random() - 0.5) * 20,
@@ -253,7 +299,7 @@ function App() {
                                  />
                             </label>
                             <input id="file-upload" type="file" className="hidden" accept="image/png, image/jpeg, image/webp" onChange={handleImageUpload} />
-                            <p className="mt-8 font-permanent-marker text-neutral-500 text-center max-w-xs text-lg">
+                            <p className="mt-8 font-permanent-marker text-gray-500 text-center max-w-xs text-lg">
                                 Click the polaroid to upload your photo and start your journey through time.
                             </p>
                         </motion.div>

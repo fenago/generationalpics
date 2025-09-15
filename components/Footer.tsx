@@ -26,16 +26,16 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm p-3 z-50 text-neutral-700 text-xs sm:text-sm border-t border-gray-200">
+        <footer className="fixed bottom-0 left-0 right-0 bg-black/50 backdrop-blur-sm p-3 z-50 text-neutral-300 text-xs sm:text-sm border-t border-white/10">
             <div className="max-w-screen-xl mx-auto flex justify-between items-center gap-4 px-4">
                 {/* Left Side */}
-                <div className="hidden md:flex items-center gap-4 text-neutral-600 whitespace-nowrap">
+                <div className="hidden md:flex items-center gap-4 text-neutral-500 whitespace-nowrap">
                     <p>DrLee.io</p>
                 </div>
 
                 {/* Right Side */}
                 <div className="flex-grow flex justify-end items-center gap-4 sm:gap-6">
-                    <div className="hidden lg:flex items-center gap-2 text-neutral-600 text-right min-w-0">
+                    <div className="hidden lg:flex items-center gap-2 text-neutral-400 text-right min-w-0">
                         <span className="flex-shrink-0">Remix this app...</span>
                         <div className="relative w-64 h-5">
                             <AnimatePresence mode="wait">
@@ -45,7 +45,7 @@ const Footer = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
                                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                                    className="absolute inset-0 font-medium text-neutral-800 whitespace-nowrap text-left"
+                                    className="absolute inset-0 font-medium text-neutral-200 whitespace-nowrap text-left"
                                 >
                                     {REMIX_IDEAS[index]}
                                 </motion.span>

@@ -107,11 +107,19 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
 
     const cardInnerContent = (
         <>
-            <div className="w-full bg-gray-100 shadow-inner flex-grow relative overflow-hidden group">
+            <div className="w-full bg-gray-200 shadow-inner flex-grow relative overflow-hidden group">
                 {status === 'pending' && <LoadingSpinner />}
                 {status === 'error' && <ErrorDisplay />}
+                {status === 'done' && !imageUrl && <Placeholder />}
                 {status === 'done' && imageUrl && (
                     <>
+                        {/* Simple image display */}
+                        <img
+                            src={imageUrl}
+                            alt={caption}
+                            className="w-full h-full object-cover"
+                        />
+                        
                         <div className={cn(
                             "absolute top-2 right-2 z-20 flex flex-col gap-2 transition-opacity duration-300",
                             !isMobile && "opacity-0 group-hover:opacity-100",
@@ -119,10 +127,10 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
                             {onDownload && (
                                 <button
                                     onClick={(e) => {
-                                        e.stopPropagation(); // Prevent drag from starting on click
+                                        e.stopPropagation();
                                         onDownload(caption);
                                     }}
-                                    className="p-2 bg-white/80 rounded-full text-gray-800 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    className="p-2 bg-black/50 rounded-full text-white hover:bg-black/75 focus:outline-none focus:ring-2 focus:ring-white"
                                     aria-label={`Download image for ${caption}`}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -136,7 +144,7 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
                                         e.stopPropagation();
                                         onShake(caption);
                                     }}
-                                    className="p-2 bg-white/80 rounded-full text-gray-800 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    className="p-2 bg-black/50 rounded-full text-white hover:bg-black/75 focus:outline-none focus:ring-2 focus:ring-white"
                                     aria-label={`Regenerate image for ${caption}`}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -145,37 +153,13 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
                                 </button>
                             )}
                         </div>
-
-
-                        {/* The developing chemical overlay - fades out */}
-                        <div
-                            className={`absolute inset-0 z-10 bg-[#3a322c] transition-opacity duration-[3500ms] ease-out ${
-                                isDeveloped ? 'opacity-0' : 'opacity-100'
-                            }`}
-                            aria-hidden="true"
-                        />
-                        
-                        {/* The Image - fades in and color corrects */}
-                        <img
-                            key={imageUrl}
-                            src={imageUrl}
-                            alt={caption}
-                            onLoad={() => setIsImageLoaded(true)}
-                            className={`w-full h-full object-cover transition-all duration-[4000ms] ease-in-out ${
-                                isDeveloped 
-                                ? 'opacity-100 filter-none' 
-                                : 'opacity-80 filter sepia(1) contrast(0.8) brightness(0.8)'
-                            }`}
-                            style={{ opacity: isImageLoaded ? undefined : 0 }}
-                        />
                     </>
                 )}
-                {status === 'done' && !imageUrl && <Placeholder />}
             </div>
             <div className="absolute bottom-4 left-4 right-4 text-center px-2">
                 <p className={cn(
                     "font-permanent-marker text-lg truncate",
-                    status === 'done' && imageUrl ? 'text-black' : 'text-neutral-600'
+                    status === 'done' && imageUrl ? 'text-black' : 'text-neutral-800'
                 )}>
                     {caption}
                 </p>
@@ -185,7 +169,7 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
 
     if (isMobile) {
         return (
-            <div className="bg-white shadow-lg !p-4 !pb-16 flex flex-col items-center justify-start aspect-[3/4] w-80 max-w-full rounded-md relative">
+            <div className="bg-neutral-100 dark:bg-neutral-100 !p-4 !pb-16 flex flex-col items-center justify-start aspect-[3/4] w-80 max-w-full rounded-md shadow-lg relative no-splash-cursor">
                 {cardInnerContent}
             </div>
         );
@@ -194,7 +178,7 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
     return (
         <DraggableCardContainer>
             <DraggableCardBody 
-                className="bg-white shadow-lg !p-4 !pb-16 flex flex-col items-center justify-start aspect-[3/4] w-80 max-w-full"
+                className="bg-neutral-100 dark:bg-neutral-100 !p-4 !pb-16 flex flex-col items-center justify-start aspect-[3/4] w-80 max-w-full no-splash-cursor"
                 dragConstraintsRef={dragConstraintsRef}
                 onDragStart={handleDragStart}
                 onDrag={handleDrag}
