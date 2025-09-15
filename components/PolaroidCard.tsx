@@ -108,7 +108,19 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
     const cardInnerContent = (
         <>
             <div className="w-full bg-gray-200 shadow-inner flex-grow relative overflow-hidden group">
-                {status === 'pending' && <LoadingSpinner />}
+                {status === 'pending' && (
+                    <>
+                        <LoadingSpinner />
+                        {/* Generating text overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center z-20">
+                            <div className="bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2">
+                                <p className="font-permanent-marker text-white text-sm animate-pulse">
+                                    Generating...
+                                </p>
+                            </div>
+                        </div>
+                    </>
+                )}
                 {status === 'error' && <ErrorDisplay />}
                 {status === 'done' && !imageUrl && <Placeholder />}
                 {status === 'done' && imageUrl && (
@@ -118,7 +130,18 @@ const PolaroidCard: React.FC<PolaroidCardProps> = ({ imageUrl, caption, status, 
                             src={imageUrl}
                             alt={caption}
                             className="w-full h-full object-cover"
+                            onLoad={() => setIsImageLoaded(true)}
                         />
+                        
+                        {/* Chemical development overlay - only shows when image is loaded */}
+                        {isImageLoaded && (
+                            <div
+                                className={`absolute inset-0 z-10 bg-[#3a322c] transition-opacity duration-[3500ms] ease-out ${
+                                    isDeveloped ? 'opacity-0' : 'opacity-100'
+                                }`}
+                                aria-hidden="true"
+                            />
+                        )}
                         
                         <div className={cn(
                             "absolute top-2 right-2 z-20 flex flex-col gap-2 transition-opacity duration-300",

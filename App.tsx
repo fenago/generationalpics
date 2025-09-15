@@ -144,16 +144,34 @@ function App() {
             try {
                 let prompt = '';
                 
-                // Create age-appropriate prompts for different decades
+                // Create detailed era-specific prompts
                 switch (decade) {
+                    case '1950s':
+                        prompt = `Transform this person into the 1950s era. Fashion: men in high-waisted trousers, suspenders, bow ties, fedora hats, leather shoes; women in circle skirts, petticoats, cardigans, pearl necklaces, red lipstick, victory rolls hairstyle. Photography: black and white or sepia tone, soft lighting, formal portrait style, film grain texture. Cultural elements: post-war optimism, family values, conservative styling. The output must be a photorealistic vintage photograph.`;
+                        break;
+                    case '1960s':
+                        prompt = `Transform this person into the 1960s era. Fashion: men in slim suits, narrow ties, Beatles-style haircuts; women in A-line dresses, mini skirts, go-go boots, pillbox hats, mod patterns, geometric prints, beehive hairstyles. Photography: vibrant colors, pop art influence, studio lighting. Cultural elements: youth rebellion, space age aesthetics, British invasion style. The output must be a photorealistic 1960s photograph.`;
+                        break;
+                    case '1970s':
+                        prompt = `Transform this person into the 1970s era. Fashion: men in wide lapels, flared pants, turtlenecks, long hair, sideburns; women in maxi dresses, peasant blouses, fringe, bell-bottoms, long straight hair with center parts, earth tones. Photography: warm color palette, golden hour lighting, slightly soft focus. Cultural elements: hippie movement, disco culture, natural textures. The output must be a photorealistic 1970s photograph.`;
+                        break;
+                    case '1980s':
+                        prompt = `Transform this person into the 1980s era. Fashion: men in power suits, wide shoulders, bold patterns, mullets; women in shoulder pads, neon colors, leg warmers, big permed hair, bold makeup, metallic fabrics. Photography: high contrast, neon lighting, studio flash, saturated colors. Cultural elements: MTV culture, excess, geometric patterns, synthesizer era aesthetics. The output must be a photorealistic 1980s photograph.`;
+                        break;
+                    case '1990s':
+                        prompt = `Transform this person into the 1990s era. Fashion: men in grunge flannel shirts, baggy jeans, backwards caps, goatees; women in slip dresses, chokers, combat boots, straight hair, minimal makeup, denim jackets. Photography: slightly desaturated colors, candid style, film photography grain. Cultural elements: alternative culture, minimalism, anti-fashion rebellion. The output must be a photorealistic 1990s photograph.`;
+                        break;
+                    case '2000s':
+                        prompt = `Transform this person into the 2000s era. Fashion: men in cargo pants, graphic tees, frosted tips, trucker hats; women in low-rise jeans, crop tops, butterfly clips, chunky highlights, velour tracksuits, platform shoes. Photography: digital camera quality, flash photography, slightly oversaturated colors. Cultural elements: Y2K aesthetics, pop culture influence, early internet era. The output must be a photorealistic 2000s photograph.`;
+                        break;
                     case '2010s':
-                        prompt = `Reimagine the person in this photo as they would appear in the 2010s, aged approximately 10 years older than in the original photo. Show them with 2010s style: smartphone era fashion, hipster aesthetics, social media influence, skinny jeans, vintage-inspired looks. Include subtle signs of aging like slight facial maturity. The output must be a photorealistic image.`;
+                        prompt = `Reimagine the person aged approximately 10 years older in 2010s style. Fashion: men in skinny jeans, flannel shirts, beards, man buns; women in high-waisted jeans, crop tops, contouring makeup, beach waves, athleisure wear. Photography: Instagram filter effects, vintage film emulation, hipster aesthetics. Cultural elements: smartphone era, social media influence, artisanal culture, vintage revival. Include subtle aging signs. The output must be a photorealistic 2010s photograph.`;
                         break;
                     case '2020s':
-                        prompt = `Reimagine the person in this photo as they would appear in the 2020s, aged approximately 20 years older than in the original photo. Show them with 2020s style: modern minimalism, athleisure, pandemic-influenced fashion, sustainable clothing trends. Include natural aging signs like more mature facial features, possible gray hair touches. The output must be a photorealistic image.`;
+                        prompt = `Reimagine the person aged approximately 20 years older in 2020s style. Fashion: men in oversized hoodies, joggers, minimalist sneakers; women in cottagecore dresses, wide-leg pants, natural makeup, curtain bangs, sustainable fashion. Photography: natural lighting, film photography revival, muted color palettes. Cultural elements: pandemic influence, work-from-home comfort, mental health awareness, sustainability focus. Include natural aging signs like mature features, possible gray touches. The output must be a photorealistic 2020s photograph.`;
                         break;
                     case '2030s':
-                        prompt = `Reimagine the person in this photo as they would appear in the 2030s, aged approximately 30 years older than in the original photo. Show them with futuristic 2030s style: advanced tech-wear, sustainable materials, smart fabrics, futuristic accessories. Include natural aging signs like distinguished mature features, gray/silver hair, wisdom lines. The output must be a photorealistic image showing a gracefully aged version of the person.`;
+                        prompt = `Reimagine the person aged approximately 30 years older in futuristic 2030s style. Fashion: smart fabrics that change color, sustainable bio-materials, minimalist tech-integrated clothing, holographic accessories, adaptive garments. Photography: advanced digital clarity, augmented reality elements, perfect lighting algorithms. Cultural elements: climate-conscious design, AI integration, longevity culture, space-age minimalism. Include distinguished aging: silver hair, wisdom lines, graceful maturity. The output must be a photorealistic futuristic 2030s photograph.`;
                         break;
                     default:
                         prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
@@ -209,16 +227,34 @@ function App() {
         try {
             let prompt = '';
             
-            // Create age-appropriate prompts for different decades
+            // Create detailed era-specific prompts
             switch (decade) {
+                case '1950s':
+                    prompt = `Transform this person into the 1950s era. Fashion: men in high-waisted trousers, suspenders, bow ties, fedora hats, leather shoes; women in circle skirts, petticoats, cardigans, pearl necklaces, red lipstick, victory rolls hairstyle. Photography: black and white or sepia tone, soft lighting, formal portrait style, film grain texture. Cultural elements: post-war optimism, family values, conservative styling. The output must be a photorealistic vintage photograph.`;
+                    break;
+                case '1960s':
+                    prompt = `Transform this person into the 1960s era. Fashion: men in slim suits, narrow ties, Beatles-style haircuts; women in A-line dresses, mini skirts, go-go boots, pillbox hats, mod patterns, geometric prints, beehive hairstyles. Photography: vibrant colors, pop art influence, studio lighting. Cultural elements: youth rebellion, space age aesthetics, British invasion style. The output must be a photorealistic 1960s photograph.`;
+                    break;
+                case '1970s':
+                    prompt = `Transform this person into the 1970s era. Fashion: men in wide lapels, flared pants, turtlenecks, long hair, sideburns; women in maxi dresses, peasant blouses, fringe, bell-bottoms, long straight hair with center parts, earth tones. Photography: warm color palette, golden hour lighting, slightly soft focus. Cultural elements: hippie movement, disco culture, natural textures. The output must be a photorealistic 1970s photograph.`;
+                    break;
+                case '1980s':
+                    prompt = `Transform this person into the 1980s era. Fashion: men in power suits, wide shoulders, bold patterns, mullets; women in shoulder pads, neon colors, leg warmers, big permed hair, bold makeup, metallic fabrics. Photography: high contrast, neon lighting, studio flash, saturated colors. Cultural elements: MTV culture, excess, geometric patterns, synthesizer era aesthetics. The output must be a photorealistic 1980s photograph.`;
+                    break;
+                case '1990s':
+                    prompt = `Transform this person into the 1990s era. Fashion: men in grunge flannel shirts, baggy jeans, backwards caps, goatees; women in slip dresses, chokers, combat boots, straight hair, minimal makeup, denim jackets. Photography: slightly desaturated colors, candid style, film photography grain. Cultural elements: alternative culture, minimalism, anti-fashion rebellion. The output must be a photorealistic 1990s photograph.`;
+                    break;
+                case '2000s':
+                    prompt = `Transform this person into the 2000s era. Fashion: men in cargo pants, graphic tees, frosted tips, trucker hats; women in low-rise jeans, crop tops, butterfly clips, chunky highlights, velour tracksuits, platform shoes. Photography: digital camera quality, flash photography, slightly oversaturated colors. Cultural elements: Y2K aesthetics, pop culture influence, early internet era. The output must be a photorealistic 2000s photograph.`;
+                    break;
                 case '2010s':
-                    prompt = `Reimagine the person in this photo as they would appear in the 2010s, aged approximately 10 years older than in the original photo. Show them with 2010s style: smartphone era fashion, hipster aesthetics, social media influence, skinny jeans, vintage-inspired looks. Include subtle signs of aging like slight facial maturity. The output must be a photorealistic image.`;
+                    prompt = `Reimagine the person aged approximately 10 years older in 2010s style. Fashion: men in skinny jeans, flannel shirts, beards, man buns; women in high-waisted jeans, crop tops, contouring makeup, beach waves, athleisure wear. Photography: Instagram filter effects, vintage film emulation, hipster aesthetics. Cultural elements: smartphone era, social media influence, artisanal culture, vintage revival. Include subtle aging signs. The output must be a photorealistic 2010s photograph.`;
                     break;
                 case '2020s':
-                    prompt = `Reimagine the person in this photo as they would appear in the 2020s, aged approximately 20 years older than in the original photo. Show them with 2020s style: modern minimalism, athleisure, pandemic-influenced fashion, sustainable clothing trends. Include natural aging signs like more mature facial features, possible gray hair touches. The output must be a photorealistic image.`;
+                    prompt = `Reimagine the person aged approximately 20 years older in 2020s style. Fashion: men in oversized hoodies, joggers, minimalist sneakers; women in cottagecore dresses, wide-leg pants, natural makeup, curtain bangs, sustainable fashion. Photography: natural lighting, film photography revival, muted color palettes. Cultural elements: pandemic influence, work-from-home comfort, mental health awareness, sustainability focus. Include natural aging signs like mature features, possible gray touches. The output must be a photorealistic 2020s photograph.`;
                     break;
                 case '2030s':
-                    prompt = `Reimagine the person in this photo as they would appear in the 2030s, aged approximately 30 years older than in the original photo. Show them with futuristic 2030s style: advanced tech-wear, sustainable materials, smart fabrics, futuristic accessories. Include natural aging signs like distinguished mature features, gray/silver hair, wisdom lines. The output must be a photorealistic image showing a gracefully aged version of the person.`;
+                    prompt = `Reimagine the person aged approximately 30 years older in futuristic 2030s style. Fashion: smart fabrics that change color, sustainable bio-materials, minimalist tech-integrated clothing, holographic accessories, adaptive garments. Photography: advanced digital clarity, augmented reality elements, perfect lighting algorithms. Cultural elements: climate-conscious design, AI integration, longevity culture, space-age minimalism. Include distinguished aging: silver hair, wisdom lines, graceful maturity. The output must be a photorealistic futuristic 2030s photograph.`;
                     break;
                 default:
                     prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
