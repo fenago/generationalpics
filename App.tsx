@@ -10,7 +10,7 @@ import { createAlbumPage } from './lib/albumUtils';
 import Footer from './components/Footer';
 import SplashCursor from './components/SplashCursor';
 
-const DECADES = ['1950s', '1960s', '1970s', '1980s', '1990s', '2000s'];
+const ALL_DECADES = ['1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s', '2030s'];
 
 // Pre-defined positions for a scattered look on desktop
 const POSITIONS = [
@@ -20,6 +20,9 @@ const POSITIONS = [
     { top: '2%', left: '35%', rotate: 10 },
     { top: '40%', left: '70%', rotate: -12 },
     { top: '50%', left: '38%', rotate: -3 },
+    { top: '10%', left: '75%', rotate: 15 },
+    { top: '60%', left: '15%', rotate: -10 },
+    { top: '25%', left: '85%', rotate: 8 },
 ];
 
 const GHOST_POLAROIDS_CONFIG = [
@@ -62,8 +65,9 @@ function App() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDownloading, setIsDownloading] = useState<boolean>(false);
     const [appState, setAppState] = useState<'idle' | 'image-uploaded' | 'generating' | 'results-shown'>('idle');
+    const [selectedDecades, setSelectedDecades] = useState<string[]>(ALL_DECADES.slice(0, 6)); // Default to first 6
     const dragAreaRef = useRef<HTMLDivElement>(null);
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isMobile = useMediaQuery('(max-width: 768px');
 
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -128,17 +132,33 @@ function App() {
         setAppState('generating');
         
         const initialImages: Record<string, GeneratedImage> = {};
-        DECADES.forEach(decade => {
+        selectedDecades.forEach(decade => {
             initialImages[decade] = { status: 'pending' };
         });
         setGeneratedImages(initialImages);
 
         const concurrencyLimit = 2; // Process two decades at a time
-        const decadesQueue = [...DECADES];
+        const decadesQueue = [...selectedDecades];
 
         const processDecade = async (decade: string) => {
             try {
-                const prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
+                let prompt = '';
+                
+                // Create age-appropriate prompts for different decades
+                switch (decade) {
+                    case '2010s':
+                        prompt = `Reimagine the person in this photo as they would appear in the 2010s, aged approximately 10 years older than in the original photo. Show them with 2010s style: smartphone era fashion, hipster aesthetics, social media influence, skinny jeans, vintage-inspired looks. Include subtle signs of aging like slight facial maturity. The output must be a photorealistic image.`;
+                        break;
+                    case '2020s':
+                        prompt = `Reimagine the person in this photo as they would appear in the 2020s, aged approximately 20 years older than in the original photo. Show them with 2020s style: modern minimalism, athleisure, pandemic-influenced fashion, sustainable clothing trends. Include natural aging signs like more mature facial features, possible gray hair touches. The output must be a photorealistic image.`;
+                        break;
+                    case '2030s':
+                        prompt = `Reimagine the person in this photo as they would appear in the 2030s, aged approximately 30 years older than in the original photo. Show them with futuristic 2030s style: advanced tech-wear, sustainable materials, smart fabrics, futuristic accessories. Include natural aging signs like distinguished mature features, gray/silver hair, wisdom lines. The output must be a photorealistic image showing a gracefully aged version of the person.`;
+                        break;
+                    default:
+                        prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
+                }
+                
                 const resultUrl = await generateDecadeImage(uploadedImage, prompt);
                 setGeneratedImages(prev => ({
                     ...prev,
@@ -187,7 +207,23 @@ function App() {
 
         // Call the generation service for the specific decade
         try {
-            const prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
+            let prompt = '';
+            
+            // Create age-appropriate prompts for different decades
+            switch (decade) {
+                case '2010s':
+                    prompt = `Reimagine the person in this photo as they would appear in the 2010s, aged approximately 10 years older than in the original photo. Show them with 2010s style: smartphone era fashion, hipster aesthetics, social media influence, skinny jeans, vintage-inspired looks. Include subtle signs of aging like slight facial maturity. The output must be a photorealistic image.`;
+                    break;
+                case '2020s':
+                    prompt = `Reimagine the person in this photo as they would appear in the 2020s, aged approximately 20 years older than in the original photo. Show them with 2020s style: modern minimalism, athleisure, pandemic-influenced fashion, sustainable clothing trends. Include natural aging signs like more mature facial features, possible gray hair touches. The output must be a photorealistic image.`;
+                    break;
+                case '2030s':
+                    prompt = `Reimagine the person in this photo as they would appear in the 2030s, aged approximately 30 years older than in the original photo. Show them with futuristic 2030s style: advanced tech-wear, sustainable materials, smart fabrics, futuristic accessories. Include natural aging signs like distinguished mature features, gray/silver hair, wisdom lines. The output must be a photorealistic image showing a gracefully aged version of the person.`;
+                    break;
+                default:
+                    prompt = `Reimagine the person in this photo in the style of the ${decade}. This includes clothing, hairstyle, photo quality, and the overall aesthetic of that decade. The output must be a photorealistic image showing the person clearly.`;
+            }
+            
             const resultUrl = await generateDecadeImage(uploadedImage, prompt);
             setGeneratedImages(prev => ({
                 ...prev,
@@ -207,6 +243,15 @@ function App() {
         setUploadedImage(null);
         setGeneratedImages({});
         setAppState('idle');
+        setSelectedDecades(ALL_DECADES.slice(0, 6)); // Reset to default selection
+    };
+
+    const handleDecadeToggle = (decade: string) => {
+        setSelectedDecades(prev => 
+            prev.includes(decade) 
+                ? prev.filter(d => d !== decade)
+                : [...prev, decade]
+        );
     };
 
     const handleDownloadIndividualImage = (decade: string) => {
@@ -233,7 +278,7 @@ function App() {
                     return acc;
                 }, {} as Record<string, string>);
 
-            if (Object.keys(imageData).length < DECADES.length) {
+            if (Object.keys(imageData).length < selectedDecades.length) {
                 alert("Please wait for all images to finish generating before downloading the album.");
                 return;
             }
@@ -313,12 +358,51 @@ function App() {
                             caption="Your Photo" 
                             status="done"
                          />
+                         
+                         {/* Decade Selection */}
+                         <div className="bg-white/80 backdrop-blur-sm border-2 border-gray-300 rounded-lg p-6 max-w-2xl w-full">
+                            <h3 className="font-permanent-marker text-xl text-gray-800 text-center mb-4">
+                                Choose Your Decades
+                            </h3>
+                            <div className="grid grid-cols-3 gap-3">
+                                {ALL_DECADES.map((decade) => (
+                                    <label 
+                                        key={decade}
+                                        className={`
+                                            flex items-center justify-center p-3 rounded-lg cursor-pointer transition-all duration-200
+                                            ${selectedDecades.includes(decade) 
+                                                ? 'bg-gray-800 text-white shadow-lg transform scale-105' 
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }
+                                        `}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedDecades.includes(decade)}
+                                            onChange={() => handleDecadeToggle(decade)}
+                                            className="sr-only"
+                                        />
+                                        <span className="font-permanent-marker text-sm">
+                                            {decade}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                            <p className="text-center text-gray-600 text-sm mt-3 font-permanent-marker">
+                                Selected: {selectedDecades.length} decade{selectedDecades.length !== 1 ? 's' : ''}
+                            </p>
+                         </div>
+                         
                          <div className="flex items-center gap-4 mt-4">
                             <button onClick={handleReset} className={secondaryButtonClasses}>
                                 Different Photo
                             </button>
-                            <button onClick={handleGenerateClick} className={primaryButtonClasses}>
-                                Generate
+                            <button 
+                                onClick={handleGenerateClick} 
+                                disabled={selectedDecades.length === 0}
+                                className={`${primaryButtonClasses} ${selectedDecades.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                                Generate {selectedDecades.length > 0 ? `(${selectedDecades.length})` : ''}
                             </button>
                          </div>
                     </div>
@@ -328,7 +412,7 @@ function App() {
                      <>
                         {isMobile ? (
                             <div className="w-full max-w-sm flex-1 overflow-y-auto mt-4 space-y-8 p-4">
-                                {DECADES.map((decade) => (
+                                {selectedDecades.map((decade) => (
                                     <div key={decade} className="flex justify-center">
                                          <PolaroidCard
                                             caption={decade}
@@ -344,7 +428,7 @@ function App() {
                             </div>
                         ) : (
                             <div ref={dragAreaRef} className="relative w-full max-w-5xl h-[600px] mt-4">
-                                {DECADES.map((decade, index) => {
+                                {selectedDecades.map((decade, index) => {
                                     const { top, left, rotate } = POSITIONS[index];
                                     return (
                                         <motion.div
